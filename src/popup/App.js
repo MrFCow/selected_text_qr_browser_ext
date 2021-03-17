@@ -1,5 +1,5 @@
 
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import Button from '@material-ui/core/Button';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import QRCode from "qrcode";
@@ -19,6 +19,7 @@ const useStyles = makeStyles({
 
 
 function App() {
+  const [text, setText] = useState(null);
   const classes = useStyles();
   const canvasRef = useRef(null);
   
@@ -28,6 +29,7 @@ function App() {
     browser.tabs.executeScript( {
       code: "window.getSelection().toString();"
     }).then(text => {
+      setText(text);
       QRCode.toCanvas(canvasRef.current, text);
     })
   }
@@ -38,6 +40,7 @@ function App() {
     browser.tabs.executeScript( {
       code: "window.location.href.toString();"
     }).then(text => {
+      setText(text);
       QRCode.toCanvas(canvasRef.current, text);
     })
   }
@@ -50,6 +53,7 @@ function App() {
       </div>
       <div>
         <canvas ref={canvasRef} className={classes.canvas}/>
+        <div>{text}</div>
       </div>
     </div>
   );
